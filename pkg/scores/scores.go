@@ -2,12 +2,14 @@ package scores
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 )
 
 type CarScore struct {
 	car    string
 	scores map[string]float64
+	total  float64
 }
 
 // ConvertScores converts the raw rows read from the csv file to a list of
@@ -16,13 +18,16 @@ func ConvertScores(rawScores []map[string]string) []CarScore {
 	var scores []CarScore
 
 	for _, r := range rawScores {
+		total := float64(0)
 		row := make(map[string]float64)
+
 		for key, value := range r {
 			s, err := strconv.Atoi(value)
 			if err != nil {
 				break
 			}
 			row[key] = float64(s)
+			total += float64(s)
 		}
 
 		scores = append(
@@ -34,6 +39,7 @@ func ConvertScores(rawScores []map[string]string) []CarScore {
 					r["Year"],
 				),
 				scores: row,
+				total:  total,
 			},
 		)
 	}
@@ -58,7 +64,8 @@ func AverageWeights(weights []map[string]float64) map[string]float64 {
 	return combined
 }
 
-// WeightScores apply the weights to the original scores for each row
+// WeightScores apply the weights to the original scores for each row.
+// By default, returns the cars in descending order, based on the total score.
 func WeightScores(
 	original []CarScore,
 	weights map[string]float64,
@@ -67,10 +74,13 @@ func WeightScores(
 	var results []CarScore
 
 	for _, row := range original {
+		total := float64(0)
 		weightedScores := make(map[string]float64)
+
 		for key, value := range row.scores {
 			if weight, exists := weights[key]; exists {
 				weightedScores[key] = value * (weight / maxWeight)
+				total += weightedScores[key]
 			}
 		}
 
@@ -79,9 +89,28 @@ func WeightScores(
 			CarScore{
 				car:    row.car,
 				scores: weightedScores,
+				total:  total,
 			},
 		)
 	}
 
+	sortByTotal(results, true)
+
 	return results
+}
+
+// SortByTotal performs an in-place sort on the given CarScores array based on
+// the total score.
+// desc=true -> highest score first
+// desc=false -> lowest score first
+func sortByTotal(scores []CarScore, desc bool) {
+	sort.Slice(
+		scores, func(i, j int) bool {
+			if desc {
+				return scores[i].total > scores[j].total
+			} else {
+				return scores[i].total < scores[j].total
+			}
+		},
+	)
 }
