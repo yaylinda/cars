@@ -46,21 +46,34 @@ def read_data():
 def weight_scores(scores, weights):
     result = {}
 
-    for car in scores:
+    print("*************************** scores")
+    print(scores)
+    print("*************************** weights")
+    print(weights)
 
-
+    for row in scores:
+        result["Car"] = "%s %s (%s)" % (row["Make"], row["Model"], row["Year"])
+        for key in row:
+            if key in weights:
+                print("key=%s, row[key]=%s, weights[key]=%d, NEW=%d" % (key, row[key], weights[key], int(row[key]) * weights[key]))
+                result[key] = int(row[key]) * ( weights[key] / 10 )
 
     return result
 
 
 def main():
     scores = read_data()
+    print(scores)
 
-    combined_weights = combine_weights()
+    # combined_weights = combine_weights()
 
     scores_linda = weight_scores(scores, LINDA_WEIGHTS)
-    scores_sean = weight_scores(scores, SEAN_WEIGHTS)
-    scores_combined = weight_scores(scores, combined_weights)
+    # scores_sean = weight_scores(scores, SEAN_WEIGHTS)
+    # scores_combined = weight_scores(scores, combined_weights)
+
+    print(scores_linda)
+    # print(scores_sean)
+    # print(scores_combined)
 
 
 if __name__ == '__main__':
