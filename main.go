@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
+
+	"github.com/yaylinda/cars/pkg/csv"
 )
 
 var (
@@ -65,13 +68,13 @@ func weightScores(scores []map[string]string, weights map[string]float64) []map[
 }
 
 func main() {
-	//dougScores, err := csv.Read()
-	//if err != nil {
-	//	fmt.Println("Error reading data:", err)
-	//	return
-	//}
-	//
-	//weightedScores := weightScores(dougScores, lindaWeights)
-	//
-	//fmt.Println(weightedScores)
+	dougScores, err := csv.Read(dougScoresFile)
+	if err != nil {
+		fmt.Println("Error reading data:", err)
+		return
+	}
+
+	weightedScores := weightScores(dougScores, lindaWeights)
+
+	fmt.Println(weightedScores)
 }
