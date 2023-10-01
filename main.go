@@ -10,9 +10,9 @@ import (
 var (
 	dougScoresFile = "dougscores.csv"
 
-	maxWeight = 10.0
+	maxWeight = float32(10.0)
 
-	lindaWeights = map[string]float64{
+	lindaWeights = map[string]float32{
 		"Styling":      2.0,
 		"Acceleration": 0.0,
 		"Handling":     3.0,
@@ -25,7 +25,7 @@ var (
 		"Value":        10.0,
 	}
 
-	seanWeights = map[string]float64{
+	seanWeights = map[string]float32{
 		"Styling":      6.5,
 		"Acceleration": 5.2,
 		"Handling":     3.1,
@@ -49,7 +49,7 @@ func main() {
 	dougScores := scores.ConvertScores(rawDougScores)
 
 	combinedWeights := scores.AverageWeights(
-		[]map[string]float64{
+		[]map[string]float32{
 			lindaWeights,
 			seanWeights,
 		},
@@ -63,11 +63,11 @@ func main() {
 		maxWeight,
 	)
 
-	fmt.Println(lindaScores)
-	fmt.Println(seanScores)
-	fmt.Println(combinedScores)
+	// fmt.Println(lindaScores)
+	// fmt.Println(seanScores)
+	// fmt.Println(combinedScores)
 
-	// fmt.Printf("Best for Linda (by total): %v\n", lindaScores[0])
-	// fmt.Printf("Best for Sean (by total): %v\n", seanScores[0])
-	// fmt.Printf("Best Combined (by total): %v\n", combinedScores[0])
+	fmt.Printf("Best for Linda (by total): %v\n", lindaScores[0])
+	fmt.Printf("Best for Sean (by total): %v\n", seanScores[0])
+	fmt.Printf("Best Combined (by total): %v\n", combinedScores[0])
 }
