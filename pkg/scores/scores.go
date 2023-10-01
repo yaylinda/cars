@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	epsilon           float32 = 1e-6
+	epsilon           float32 = 1e-3
 	ignoreColumnYear  string  = "Year"
 	ignoreColumnMake  string  = "Make"
 	ignoreColumnModel string  = "Model"
