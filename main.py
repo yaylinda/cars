@@ -22,7 +22,7 @@ SEAN_WEIGHTS = {
     "Features": 7.5,
     "Comfort": 2.3,
     "Quality": 3.7,
-    "Practicality": 0,
+    "Practicality": 0.0,
     "Value": 0.2,
 }
 
