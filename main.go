@@ -67,7 +67,7 @@ func main() {
 	// fmt.Println(seanScores)
 	// fmt.Println(combinedScores)
 
-	fmt.Printf("Best for Linda (by total): %v\n", lindaScores[0])
-	fmt.Printf("Best for Sean (by total): %v\n", seanScores[0])
-	fmt.Printf("Best Combined (by total): %v\n", combinedScores[0])
+	fmt.Printf("Best for Linda (by total): %v\n\n", lindaScores[0])
+	fmt.Printf("Best for Sean (by total): %v\n\n", seanScores[0])
+	fmt.Printf("Best Combined (by total): %v\n\n", combinedScores[0])
 }

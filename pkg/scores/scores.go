@@ -6,7 +6,12 @@ import (
 	"strconv"
 )
 
-const epsilon float32 = 1e-6
+const (
+	epsilon           float32 = 1e-6
+	ignoreColumnYear  string  = "Year"
+	ignoreColumnMake  string  = "Make"
+	ignoreColumnModel string  = "Model"
+)
 
 type CarScore struct {
 	car    string
@@ -24,10 +29,15 @@ func ConvertScores(rawScores []map[string]string) []CarScore {
 		row := make(map[string]float32)
 
 		for key, value := range r {
+			if key == ignoreColumnYear || key == ignoreColumnMake || key == ignoreColumnModel {
+				continue
+			}
+
 			s, err := strconv.Atoi(value)
 			if err != nil {
-				break
+				continue
 			}
+
 			row[key] = float32(s)
 			total += float32(s)
 		}
@@ -82,7 +92,7 @@ func WeightScores(
 		for key, value := range row.scores {
 			if weight, exists := weights[key]; exists {
 				weightedScores[key] = value * (weight / maxWeight)
-				total += weightedScores[key]
+				total += value * (weight / maxWeight)
 			}
 		}
 
