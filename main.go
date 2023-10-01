@@ -2,13 +2,15 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/yaylinda/cars/pkg/csv"
+	"github.com/yaylinda/cars/pkg/scores"
 )
 
 var (
 	dougScoresFile = "dougscores.csv"
+
+	maxWeight = 10.0
 
 	lindaWeights = map[string]float64{
 		"Styling":      2.0,
@@ -37,44 +39,31 @@ var (
 	}
 )
 
-func combineWeights(linda, sean map[string]float64) map[string]float64 {
-	combined := make(map[string]float64)
-	for key, val := range linda {
-		combined[key] = (val + sean[key]) / 2.0
-	}
-	return combined
-}
-
-func preProcess() {
-
-}
-
-func weightScores(scores []map[string]string, weights map[string]float64) []map[string]float64 {
-	var results []map[string]float64
-
-	for _, row := range scores {
-		result := make(map[string]float64)
-		result["Car"] = 0 // Placeholder to ensure "Car" key exists
-		for key, value := range row {
-			if weight, exists := weights[key]; exists {
-				intValue, _ := strconv.Atoi(value)
-				result[key] = float64(intValue) * (weight / 10.0)
-			}
-		}
-		results = append(results, result)
-	}
-
-	return results
-}
-
 func main() {
-	dougScores, err := csv.Read(dougScoresFile)
+	rawDougScores, err := csv.Read(dougScoresFile)
 	if err != nil {
 		fmt.Println("Error reading data:", err)
 		return
 	}
 
-	weightedScores := weightScores(dougScores, lindaWeights)
+	dougScores := scores.ConvertScores(rawDougScores)
 
-	fmt.Println(weightedScores)
+	combinedWeights := scores.AverageWeights(
+		[]map[string]float64{
+			lindaWeights,
+			seanWeights,
+		},
+	)
+
+	lindaScores := scores.WeightScores(dougScores, lindaWeights, maxWeight)
+	seanScores := scores.WeightScores(dougScores, seanWeights, maxWeight)
+	combinedScores := scores.WeightScores(
+		dougScores,
+		combinedWeights,
+		maxWeight,
+	)
+
+	fmt.Println(lindaScores)
+	fmt.Println(seanScores)
+	fmt.Println(combinedScores)
 }
